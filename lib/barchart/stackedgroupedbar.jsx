@@ -18,37 +18,13 @@ class StackedGroupedBar extends React.Component {
       dataSet: null
 
     }
-    // this.sampleData = this.sampleData.bind(this);
-    // this.bumps = this.bumps.bind(this);
+
 
   }
 
-  // sampleData() {
-  //   let m = 58, n = 4, xz, yz, y01z, yMax, y1Max, dataSet;
-  //   xz = d3.range(m);
-  //   yz = d3.range(n).map(()=> this.bumps(m));
-  //   y01z = d3.stack().keys(d3.range(n))(d3.transpose(yz));
-  //   yMax = d3.max(yz, y => d3.max(y));
-  //   y1Max = d3.max(y01z, y => d3.max(y, d => d[1]));
-  //   dataSet = {
-  //     m: m,
-  //     n: n,
-  //     xz: xz,
-  //     yz: yz,
-  //     y01z: y01z,
-  //     yMax: yMax,
-  //     y1Max: y1Max
-  //   };
-  //   this.setState({ dataSet: dataSet });
-  // }
-
   componentWillMount() {
     this.setUpData();
-    // if (!this.state.data) {
-    //   this.sampleData();
-    // } else {
-    //   this.setUpData();
-    // }
+
   }
 
   setUpData() {
@@ -151,29 +127,7 @@ class StackedGroupedBar extends React.Component {
 
   }
 
-  // bumps(m) { //only used for sampleData
-  //   var values = [], i, j, w, x, y, z;
 
-  //   for (i = 0; i < m; i++) {
-  //     values[i] = 0.1 + 0.1 * Math.random();
-  //   }
-
-  //   for (j = 0; j < 5; j++) {
-  //     x = 1 / (0.1 + Math.random());
-  //     y = 2 * Math.random() - 0.5;
-  //     z = 10 / (0.1 + Math.random());
-  //     for (i = 0; i < m; i++) {
-  //       w = (i / m - y) * z;
-  //       values[i] += x * Math.exp(-w * w);
-  //     }
-  //   }
-
-  //   for (i = 0; i < m; i++) {
-  //     values[i] = Math.max(0, values[i]);
-  //   }
-
-  //   return values;
-  // }
 
   render() {
     return (
