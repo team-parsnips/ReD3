@@ -2,14 +2,14 @@ import React    from 'react';
 import * as d3  from 'd3';
 
 const explanationStyle = {
-  position: 'absolute',
-  top: '260px',
-  left: '305px',
-  width: '140px',
-  textAlign: 'center',
-  color: '#666',
-  zIndex: -1,
-  visibility: 'hidden',
+  position   : 'absolute',
+  top        : '260px',
+  left       : '305px',
+  width      : '140px',
+  textAlign  : 'center',
+  color      : '#666',
+  zIndex     : -1,
+  visibility : 'hidden',
 }
 
 

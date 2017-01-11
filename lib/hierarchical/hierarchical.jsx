@@ -1,68 +1,63 @@
-import React from 'react';
-import * as d3 from 'd3';
+import React    from 'react';
+import * as d3  from 'd3';
 
 class HierarchicalEdgeBundle extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
   }
 
   componentDidMount() {
+    var diameter, radius, data, innerRadius, cluster, bundle, line, svg, link, node, hierarchy, hierarchy2, nodes, links;
 
-    var diameter = 960,
-        radius = diameter / 2,
-        innerRadius = radius - 120;
+    diameter    = this.props.diameter;
+    data        = this.props.data;
+    radius      = diameter / 2;
+    innerRadius = radius - 120;
 
-    var cluster = d3.cluster()
-        .size([360, innerRadius])
+    cluster     = d3.cluster()
+                    .size([360, innerRadius])
 
-    var bundle = d3.curveBundle();
+    bundle      = d3.curveBundle();
 
-    var line = d3.radialLine()
-        .angle(d => d.x)
-        .radius(d => d.y)
-        .curve(d3.curveBundle.beta(0.95));
+    line        = d3.radialLine()
+                    .angle(d => d.x)
+                    .radius(d => d.y)
+                    .curve(d3.curveBundle.beta(0.95));
 
-    var svg = d3.select("#hierarchical").append("svg")
-        .attr("width", diameter)
-        .attr("height", diameter)
-      .append("g")
-        .attr("transform", "translate(" + radius + "," + radius + ")");
+    svg         = d3.select("#hierarchical").append("svg")
+                      .attr("width", diameter)
+                      .attr("height", diameter)
+                    .append("g")
+                      .attr("transform", "translate(" + radius + "," + radius + ")");
 
-    var link = svg.append("g").selectAll(".link"),
-        node = svg.append("g").selectAll(".node");
+    link        = svg.append("g").selectAll(".link"),
+    node        = svg.append("g").selectAll(".node");
 
-    d3.json('/hierarchicaldata', function(err, root) {
-      if (err) throw err;
 
-      var hierarchy = packageHierarchy(root);
+    hierarchy   = packageHierarchy(data);
 
-      var hierarchy2 = d3.hierarchy(hierarchy);
+    hierarchy2  = d3.hierarchy(hierarchy);
 
-      var nodes = cluster(hierarchy2);
-      console.log('nodes', nodes);
+    nodes       = cluster(hierarchy2);
 
-      var links = packageImports(nodes);
-      console.log('links', links);
+    links       = packageImports(nodes);
 
-      link = link
-          .data(links)
-        .enter().append("path")
-          .attr("class", "link")
-          .attr("d", d => line(d.source.path(d.target)));
-          
+    link        = link.data(links)
+                    .enter().append("path")
+                      .attr("class", "link")
+                      .attr("d", d => line(d.source.path(d.target)));
+        
 
-      node = node
-          .data(nodes.descendants().filter(function(n) { return !n.children; }))
-        .enter().append("text")
-          .attr("class", "node")
-          .attr("dy", ".31em")
-          .attr("transform", function(d) { 
-            return "rotate(" + (d.x - 90) + ")translate(" + (d.y + 8) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
-          .style("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-          .text(function(d) { return d.data.key; })
-          .on("mouseover", mouseovered)
-          .on("mouseout", mouseouted);
-    });
+    node        = node.data(nodes.descendants().filter(function(n) { return !n.children; }))
+                    .enter().append("text")
+                      .attr("class", "node")
+                      .attr("dy", ".31em")
+                      .attr("transform", function(d) { 
+                        return "rotate(" + (d.x - 90) + ")translate(" + (d.y + 8) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
+                    .style("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+                    .text(function(d) { return d.data.key; })
+                    .on("mouseover", mouseovered)
+                    .on("mouseout", mouseouted);
 
     function mouseovered(d) {
       node
@@ -138,10 +133,19 @@ class HierarchicalEdgeBundle extends React.Component {
 
   render() {
     return (
-      <div id={"hierarchical"}>
+      <div id="hierarchical">
       </div>
     )
   }
+}
+
+HierarchicalEdgeBundle.propTypes = {
+  diameter: React.PropTypes.number,
+  data: React.PropTypes.array.isRequired
+}
+
+HierarchicalEdgeBundle.defaultProps = {
+  diameter: 960
 }
 
 export default HierarchicalEdgeBundle;
