@@ -5,10 +5,10 @@ var BUILD_DIR = path.resolve(__dirname, 'dist');
 var APP_DIR = path.resolve(__dirname, 'lib');
 
 var config = {
-  entry: APP_DIR + '/index.jsx',
+  entry: APP_DIR + '/index.es.js',
   output: {
     path: BUILD_DIR,
-    filename: 'bundle.js'
+    filename: 'index.js'
   },
   module : {
     loaders : [
