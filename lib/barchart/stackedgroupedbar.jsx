@@ -1,6 +1,7 @@
 import React from 'react';
 import * as d3 from 'd3';
 
+
 const margin = {
   top: 40,
   right: 10,
@@ -12,48 +13,46 @@ class StackedGroupedBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      width: this.props.width || 960,
-      innerWidth: (this.props.width || 960) - margin.left - margin.right,
-      height: this.props.height || 500,
-      innerHeight: (this.props.height ||500) - margin.top - margin.bottom,
-      data: this.props.data || null,
+      innerWidth: this.props.width - margin.left - margin.right,
+      innerHeight: this.props.height - margin.top - margin.bottom,
       dataSet: null
 
     }
-    this.sampleData = this.sampleData.bind(this);
-    this.bumps = this.bumps.bind(this);
+    // this.sampleData = this.sampleData.bind(this);
+    // this.bumps = this.bumps.bind(this);
 
   }
 
-  sampleData() {
-    let m = 58, n = 4, xz, yz, y01z, yMax, y1Max, dataSet;
-    xz = d3.range(m);
-    yz = d3.range(n).map(()=> this.bumps(m));
-    y01z = d3.stack().keys(d3.range(n))(d3.transpose(yz));
-    yMax = d3.max(yz, y => d3.max(y));
-    y1Max = d3.max(y01z, y => d3.max(y, d => d[1]));
-    dataSet = {
-      m: m,
-      n: n,
-      xz: xz,
-      yz: yz,
-      y01z: y01z,
-      yMax: yMax,
-      y1Max: y1Max
-    };
-    this.setState({ dataSet: dataSet });
-  }
+  // sampleData() {
+  //   let m = 58, n = 4, xz, yz, y01z, yMax, y1Max, dataSet;
+  //   xz = d3.range(m);
+  //   yz = d3.range(n).map(()=> this.bumps(m));
+  //   y01z = d3.stack().keys(d3.range(n))(d3.transpose(yz));
+  //   yMax = d3.max(yz, y => d3.max(y));
+  //   y1Max = d3.max(y01z, y => d3.max(y, d => d[1]));
+  //   dataSet = {
+  //     m: m,
+  //     n: n,
+  //     xz: xz,
+  //     yz: yz,
+  //     y01z: y01z,
+  //     yMax: yMax,
+  //     y1Max: y1Max
+  //   };
+  //   this.setState({ dataSet: dataSet });
+  // }
 
   componentWillMount() {
-    if (!this.state.data) {
-      this.sampleData();
-    } else {
-      this.setUpData();
-    }
+    this.setUpData();
+    // if (!this.state.data) {
+    //   this.sampleData();
+    // } else {
+    //   this.setUpData();
+    // }
   }
 
   setUpData() {
-    var m, n, xz, yz, y01z, yMax, y1Max, dataSet, transposedData = [], data = this.state.data;
+    var m, n, xz, yz, y01z, yMax, y1Max, dataSet, transposedData = [], data = this.props.data;
     m = data['x-ticks'] || 25;
     xz = data['x-axis'] || d3.range(m);
     yz = data.data;
@@ -102,8 +101,8 @@ class StackedGroupedBar extends React.Component {
               .attr('height', 0);
 
     rect.transition().delay((d, i) => i * 10)
-      .attr('y', d => y(d[1]))
-      .attr('height', d => y(d[0]) - y(d[1]));
+          .attr('y', d => y(d[1]))
+          .attr('height', d => y(d[0]) - y(d[1]));
 
     g.append('g').attr('class', 'axis axis--x')
       .attr('transform', 'translate(0,' + this.state.innerHeight + ')')
@@ -116,7 +115,6 @@ class StackedGroupedBar extends React.Component {
     }, 2000);
 
     function changed() {
-      console.log('changed');
       timeout.stop();
       if (this.value === 'grouped') {
         transitionGrouped();
@@ -131,11 +129,11 @@ class StackedGroupedBar extends React.Component {
       rect.transition()
           .duration(500)
           .delay((d, i) => i * 10)
-          .attr('x', (d, i, g) => x(i) + x.bandwidth() / data.n * g[0].parentNode.__data__.index)
-          .attr('width', x.bandwidth() / data.n)
-        .transition()
-          .attr('y', d => y(d[1] - d[0]))
-          .attr('height', d => y(0) - y(d[1] - d[0]));
+            .attr('x', (d, i, g) => x(i) + x.bandwidth() / data.n * g[0].parentNode.__data__.index)
+            .attr('width', x.bandwidth() / data.n)
+          .transition()
+            .attr('y', d => y(d[1] - d[0]))
+            .attr('height', d => y(0) - y(d[1] - d[0]));
     }
 
     function transitionStacked() {
@@ -144,38 +142,38 @@ class StackedGroupedBar extends React.Component {
       rect.transition()
           .duration(500)
           .delay((d, i) => i * 10)
-          .attr('y', d => y(d[1]))
-          .attr('height', d => y(d[0]) - y(d[1]))
-        .transition()
-          .attr('x', (d, i) => x(i))
-          .attr('width', x.bandwidth());
+            .attr('y', d => y(d[1]))
+            .attr('height', d => y(d[0]) - y(d[1]))
+          .transition()
+            .attr('x', (d, i) => x(i))
+            .attr('width', x.bandwidth());
     }
 
   }
 
-  bumps(m) { //only used for sampleData
-    var values = [], i, j, w, x, y, z;
+  // bumps(m) { //only used for sampleData
+  //   var values = [], i, j, w, x, y, z;
 
-    for (i = 0; i < m; i++) {
-      values[i] = 0.1 + 0.1 * Math.random();
-    }
+  //   for (i = 0; i < m; i++) {
+  //     values[i] = 0.1 + 0.1 * Math.random();
+  //   }
 
-    for (j = 0; j < 5; j++) {
-      x = 1 / (0.1 + Math.random());
-      y = 2 * Math.random() - 0.5;
-      z = 10 / (0.1 + Math.random());
-      for (i = 0; i < m; i++) {
-        w = (i / m - y) * z;
-        values[i] += x * Math.exp(-w * w);
-      }
-    }
+  //   for (j = 0; j < 5; j++) {
+  //     x = 1 / (0.1 + Math.random());
+  //     y = 2 * Math.random() - 0.5;
+  //     z = 10 / (0.1 + Math.random());
+  //     for (i = 0; i < m; i++) {
+  //       w = (i / m - y) * z;
+  //       values[i] += x * Math.exp(-w * w);
+  //     }
+  //   }
 
-    for (i = 0; i < m; i++) {
-      values[i] = Math.max(0, values[i]);
-    }
+  //   for (i = 0; i < m; i++) {
+  //     values[i] = Math.max(0, values[i]);
+  //   }
 
-    return values;
-  }
+  //   return values;
+  // }
 
   render() {
     return (
@@ -186,12 +184,23 @@ class StackedGroupedBar extends React.Component {
         </form>
         <svg
         className='stackedgrouped'
-        width={this.state.width}
-        height={this.state.height}>
+        width={this.props.width}
+        height={this.props.height}>
         </svg>
       </div>
     );
   }
 }
+
+StackedGroupedBar.propTypes = {
+  data: React.PropTypes.object.isRequired,
+  width: React.PropTypes.number,
+  height: React.PropTypes.number
+}
+
+StackedGroupedBar.defaultProps = {
+  width: 960,
+  height: 500,
+};
 
 export default StackedGroupedBar;

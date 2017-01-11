@@ -7,10 +7,6 @@ class Voronoi extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSet: null,
-      dataSet0: null,
-      width: 960,
-      height: 500,
       voronoi: null,
       polygon: null,
       link: null,
@@ -24,41 +20,28 @@ class Voronoi extends React.Component {
     this.moved = this.moved.bind(this);
   }
 
-  sampleData() {
-    let width = this.state.width;
-    let height = this.state.height;
-    return d3.range(100).map(d => {
-      return [Math.random() * width, Math.random() * height];
-    });
-  }
-
-  componentWillMount() {
-    this.setState({dataSet: this.sampleData()});
-  }
-
   componentDidMount() {
-    console.log(this.state.dataSet);
-    var svg, voronoi, polygon, link, site;
+    var svg, voronoi, polygon, link, site, yo;
 
     svg     = d3.select('.voronoi');
     voronoi = d3.voronoi().extent([[-1, -1], [960 + 1, 500 + 1]]);
     polygon = svg.append('g')
                 .attr('class', 'polygon')
-              .selectAll('path').data(voronoi.polygons(this.state.dataSet))
+              .selectAll('path').data(voronoi.polygons(this.props.data))
               .enter().append('path')
                 .attr('fill', 'none')
                 .attr('stroke', '#000')
               .call(this.redrawPolygon);
     link    = svg.append('g')
                 .attr('class', 'links')
-              .selectAll('line').data(voronoi.links(this.state.dataSet))
+              .selectAll('line').data(voronoi.links(this.props.data))
               .enter().append('line')
                 .attr('stroke', '#000')
                 .attr('stroke-opacity', '0.2') 
               .call(this.redrawLink);
     site    = svg.append('g')
                 .attr('class', 'sites')
-              .selectAll('circle').data(this.state.dataSet)
+              .selectAll('circle').data(this.props.data)
               .enter().append('circle')
                 .attr('r', 2.5)
                 .attr('fill', '#000')
@@ -76,7 +59,7 @@ class Voronoi extends React.Component {
   }
 
   moved(e) {
-    let temp = this.state.dataSet;
+    let temp = this.props.data;
     temp[0] = [e.clientX, e.clientY];
     this.setState({dataSet: temp});
     this.redraw();
@@ -86,12 +69,12 @@ class Voronoi extends React.Component {
   }
 
   redraw() {
-    let diagram = this.state.voronoi(this.state.dataSet);
+    let diagram = this.state.voronoi(this.props.data);
     this.setState({polygon: this.state.polygon.data(diagram.polygons()).call(this.redrawPolygon)});
     this.setState({link: this.state.link.data(diagram.links())});
     this.setState({link: this.state.link.exit().remove()});
     this.setState({link: this.state.link.enter().append('line').merge(this.state.link).call(this.redrawLink)});
-    this.setState({site: this.state.site.data(this.state.dataSet).call(this.redrawSite)});
+    this.setState({site: this.state.site.data(this.props.data).call(this.redrawSite)});
   }
 
   redrawPolygon(polygon) {
@@ -115,8 +98,8 @@ class Voronoi extends React.Component {
     return (
       <div>
         <svg
-        width={this.state.width}
-        height={this.state.height}
+        width={this.props.width}
+        height={this.props.height}
         className='voronoi'
         onMouseMove={this.moved}>
         </svg>
@@ -125,5 +108,16 @@ class Voronoi extends React.Component {
   }
 
 }
+
+Voronoi.propTypes = {
+  data: React.PropTypes.array.isRequired,
+  width: React.PropTypes.number,
+  height: React.PropTypes.number
+}
+
+Voronoi.defaultProps = {
+  width: 960,
+  height: 500,
+};
 
 export default Voronoi;
