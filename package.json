@@ -4,7 +4,8 @@
   "description": "Reusable React components for D3 graphs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack -p"
   },
   "repository": {
     "type": "git",
@@ -18,17 +19,16 @@
     "red3",
     "ReD3"
   ],
-  "homepage": "red3.herokuapp.com",
+  "homepage": "https://github.com/team-parsnips/ReD3#readme",
   "author": [
-    "Robert Oh", 
+    "Robert Oh",
     "Emerson Hum",
     "Vy Trinh"
   ],
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vytrinh/ReD3/issues"
+    "url": "https://github.com/team-parsnips/ReD3/issues"
   },
-  "homepage": "https://github.com/vytrinh/ReD3#readme",
   "devDependencies": {
     "babel-core": "^6.21.0",
     "babel-loader": "^6.2.10",
@@ -37,10 +37,11 @@
     "react-dom": "^15.4.1",
     "react-router": "^3.0.0",
     "react-tap-event-plugin": "^2.0.1",
-    "topojson": "^2.2.0",
     "webpack": "^1.14.0"
   },
   "dependencies": {
-    "d3": "^4.4.0"
+    "d3": "^4.4.0",
+    "react": "^15.4.2",
+    "topojson": "^2.2.0"
   }
 }
