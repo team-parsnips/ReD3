@@ -60,6 +60,8 @@ class Pie extends React.Component {
 }
 
 Pie.propTypes = {
+  width: React.PropTypes.number,
+  height: React.PropTypes.number,
   data: React.PropTypes.array.isRequired,
   group: React.PropTypes.string.isRequired,
   count: React.PropTypes.string.isRequired
