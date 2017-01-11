@@ -1,59 +1,54 @@
-import React from 'react';
-import * as d3 from 'd3';
+import React    from 'react';
+import * as d3  from 'd3';
 
 class Pie extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      width: this.props.width || 960,
-      height: this.props.height || 500,
-      group: this.props.group,
-      count: this.props.count,
-    }
   }
 
   componentDidMount() {
-    var context = this;
+    var context, width, height, data, group, count, radius, colors, arc, labelArc, pie, svg, g;
 
-    var radius = Math.min(this.state.width, this.state.height) / 2;
-    var colors = d3.scaleOrdinal(d3.schemeCategory20);
+    width    =  this.props.width;
+    height   =  this.props.height;
 
-    var arc = d3.arc()
-          .outerRadius(radius - 10)
-          .innerRadius(0);
+    group    =  this.props.group;
+    count    =  this.props.count;
+    data     =  this.props.data;
 
-    var labelArc = d3.arc()
-          .outerRadius(radius - 40)
-          .innerRadius(radius - 40);
+    radius   =  Math.min(width, height) / 2;
+    colors   =  d3.scaleOrdinal(d3.schemeCategory20);
 
-    var pie = d3.pie()
-          .value(d => d[context.state.count]);
+    arc      =  d3.arc()
+                  .outerRadius(radius - 10)
+                  .innerRadius(0);
 
-    var svg = d3.select('#pie').append('svg')
-          .attr('width', this.state.width)
-          .attr('height', this.state.height)
-        .append('g')
-          .attr('transform', 'translate(' + this.state.width / 2 + ',' + this.state.height / 2 + ')');
+    labelArc =  d3.arc()
+                  .outerRadius(radius - 40)
+                  .innerRadius(radius - 40);
 
-    d3.csv('/csvData', (err, data) => {
-      if (err) throw err;
+    pie      =  d3.pie()
+                  .value(d => d[count]);
 
-      var g = svg.selectAll('.arc')
-            .data(pie(data))
-          .enter().append('g')
-            .attr('class', arc);
+    svg      =  d3.select('#pie').append('svg')
+                    .attr('width', width)
+                    .attr('height', height)
+                  .append('g')
+                    .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
-      g.append('path')
-            .attr('d', arc)
-            .style('fill', d => colors(d.data[context.state.group]));
+    g        =  svg.selectAll('.arc').data(pie(data))
+                  .enter().append('g')
+                    .attr('class', arc);
+              
+    g.append('path')
+        .attr('d', arc)
+      .style('fill', d => colors(d.data[group]));
+              
+    g.append('text')
+        .attr('transform', d => 'translate(' + labelArc.centroid(d) + ')')
+        .attr("dy", ".35em")
+      .text(d => d.data[group]);
 
-      g.append('text')
-            .attr('transform', d => 'translate(' + labelArc.centroid(d) + ')')
-            .attr("dy", ".35em")
-            .text(d => d.data[context.state.group]);
-            
-            
-    })
   }
 
   render() {
@@ -62,6 +57,17 @@ class Pie extends React.Component {
       </div>
     )
   }
+}
+
+Pie.propTypes = {
+  data: React.PropTypes.array.isRequired,
+  group: React.PropTypes.string.isRequired,
+  count: React.PropTypes.string.isRequired
+}
+
+Pie.defaultProps = {
+  width: 960,
+  height: 500
 }
 
 export default Pie;
