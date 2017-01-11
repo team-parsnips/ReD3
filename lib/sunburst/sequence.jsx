@@ -1,5 +1,5 @@
-import React from 'react';
-import * as d3 from 'd3';
+import React    from 'react';
+import * as d3  from 'd3';
 
 const explanationStyle = {
   position: 'absolute',
@@ -20,62 +20,43 @@ class SequenceSunBurst extends React.Component {
 
   componentDidMount() {
     // Dimensions of sunburst.
-    var width = 750;
-    var height = 600;
-    var radius = Math.min(width, height) / 2;
+    var width, height, data, radius, x, y, b, colors, totalSize, vis, partition, arc;
 
-    var x = d3.scaleLinear()
-        .range([0, 2 * Math.PI]);
+    width     = this.props.width;
+    height    = this.props.height;
+    data      = this.props.data;
+    radius    = Math.min(width, height) / 2;
 
-    var y = d3.scaleLinear()
-        .range([0, radius]);
+    x         = d3.scaleLinear()
+                  .range([0, 2 * Math.PI]);
+
+    y         = d3.scaleLinear()
+                  .range([0, radius]);
 
     // Breadcrumb dimensions: width, height, spacing, width of tip/tail.
-    var b = {
-      w: 75, h: 30, s: 3, t: 10
-    };
+    b         = { w: 75, h: 30, s: 3, t: 10 };
 
-    // Mapping of step names to colors.
-    /*var colors = {
-      "home": "#5687d1",
-      "product": "#7b615c",
-      "search": "#de783b",
-      "account": "#6ab975",
-      "other": "#a173d1",
-      "end": "#bbbbbb"
-    };*/
-    var colors = d3.scaleOrdinal(d3.schemeCategory20);
-    this.colors = colors;
+    colors    = d3.scaleOrdinal(d3.schemeCategory20);
 
     // Total size of all segments; we set this later, after loading the data.
-    var totalSize = 0; 
+    totalSize = 0; 
 
-    var vis = d3.select("#chart").append("svg:svg")
-        .attr("width", width)
-        .attr("height", height)
-        .append("svg:g")
-        .attr("id", "container")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    vis       = d3.select("#chart").append("svg:svg")
+                    .attr("width", width)
+                    .attr("height", height)
+                  .append("svg:g")
+                    .attr("id", "container")
+                    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    var partition = d3.partition();
+    partition = d3.partition();
 
-    var arc = d3.arc()
-        .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x0))); })
-        .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x1))); })
-        .innerRadius(function(d) { return Math.max(0, y(d.y0)); })
-        .outerRadius(function(d) { return Math.max(0, y(d.y1)); });
+    arc       = d3.arc()
+                  .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x0))); })
+                  .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x1))); })
+                  .innerRadius(function(d) { return Math.max(0, y(d.y0)); })
+                  .outerRadius(function(d) { return Math.max(0, y(d.y1)); });
 
-    // Use d3.text and d3.csv.parseRows so that we do not need to have a header
-    // row, and can receive the csv as an array of arrays.
-/*    d3.text("visit-sequences.csv", function(text) {
-      var csv = d3.csv.parseRows(text);
-      var json = buildHierarchy(csv);
-      createVisualization(json);
-    });*/
-    d3.json("/flare", function(error, root) {
-      if (error) throw error;
-      createVisualization(root);
-    });
+    createVisualization(data);
 
     // Main function to draw and set up the visualization, once we have the data.
     function createVisualization(json) {
@@ -92,7 +73,6 @@ class SequenceSunBurst extends React.Component {
           .style("opacity", 0);
 
       // For efficiency, filter nodes to keep only those large enough to see.
-
       var root = d3.hierarchy(json);
       root.sum(function(d) { return d.size; });
 
@@ -337,6 +317,17 @@ class SequenceSunBurst extends React.Component {
       </div>
     )
   }
+}
+
+SequenceSunBurst.propTypes = {
+  width: React.PropTypes.number,
+  height: React.PropTypes.number,
+  data: React.PropTypes.array.isRequired,
+}
+
+SequenceSunBurst.defaultProps = {
+  width: 750,
+  height: 600
 }
 
 export default SequenceSunBurst;
