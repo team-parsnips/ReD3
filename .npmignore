@@ -1,7 +1,8 @@
-lib
-.DS_Store
+**/.DS_Store
 *.log
-src
+lib
 test
 examples
 coverage
+.gitignore
+
