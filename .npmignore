@@ -1,7 +1,10 @@
 lib
-.DS_Store
+**/.DS_Store
 *.log
-src
 test
 examples
 coverage
+.gitignore
+.eslintrc
+.babelrc
+
