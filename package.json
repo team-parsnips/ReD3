@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack -p",
     "prepublish": "babel lib --out-dir ./dist"
+
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,8 @@
     "red3",
     "ReD3"
   ],
-  "homepage": "https://github.com/vytrinh/ReD3#readme",
+  "homepage": "red3.herokuapp.com",
+
   "author": [
     "Robert Oh",
     "Emerson Hum",
@@ -28,7 +30,7 @@
   ],
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vytrinh/ReD3/issues"
+    "url": "https://github.com/team-parsnips/ReD3/issues"
   },
   "devDependencies": {
     "babel-cli": "^6.6.4",
