@@ -1,7 +1,7 @@
 import React from 'react';
 import * as d3 from 'd3';
 import * as topojson from 'topojson';
-import usamap from './usamap.json';
+import usamap from './../assets/usamap.json';
 
 
 class ZoomableMap extends React.Component {

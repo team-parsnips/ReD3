@@ -91,7 +91,7 @@ class DndTree extends React.Component {
 
 export default DndTree;
 
-DndTre.propTypes = {
+DndTree.propTypes = {
   height: React.PropTypes.number.isRequired, 
   width: React.PropTypes.number.isRequired, 
   data: React.PropTypes.array.isRequired
