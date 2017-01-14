@@ -13,6 +13,7 @@ Import the graph from the library:
 
 ```js
 import { Pie } from 'red3'
+```
 
 Add the graph to your component:
 
@@ -24,6 +25,7 @@ render() {
     </div>
   )
 }
+```
 
 Done!
 
